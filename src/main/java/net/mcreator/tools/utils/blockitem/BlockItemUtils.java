@@ -7,6 +7,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class BlockItemUtils {
+	public static final Pattern BLOCK_CLASS_PATTERN = Pattern.compile("public static final Block (.*?) = ");
+	public static final Pattern ITEM_CLASS_PATTERN = Pattern.compile("public static final Item (.*?) = ");
+	public static final Pattern BLOCK_REGISTRY_PATTERN = Pattern.compile(
+			"public static final Block .*? = register\\(\"(.*?)\", ");
+	public static final Pattern ITEM_REGISTRY_PATTERN = Pattern.compile(
+			"public static final Item .*? = registerItem\\(\"(.*?)\", ");
 	private static final Pattern name_pattern = Pattern.compile("- (.*):");
 	private static final Pattern read_name_pattern = Pattern.compile(" {2}readable_name: \"(.*)\"");
 	private static final Pattern texture_pattern = Pattern.compile(" {2}texture: (.*)");
@@ -14,11 +20,11 @@ public class BlockItemUtils {
 	private static final Pattern subtypes_pattern = Pattern.compile(" {2}subtypes: (.*)");
 	private static final Pattern type_pattern = Pattern.compile(" {2}type: (.*)");
 
-	public static LinkedHashMap<String, Entry> parseList(ArrayList<String> list) {
-		LinkedHashMap<String, Entry> entryList = new LinkedHashMap<>();
+	public static LinkedHashMap<String, BlockItemEntry> parseList(ArrayList<String> list) {
+		LinkedHashMap<String, BlockItemEntry> entryList = new LinkedHashMap<>();
 
 		String key = null;
-		Entry entry = new Entry();
+		BlockItemEntry blockItemEntry = new BlockItemEntry();
 
 		for (String line : list) {
 			Matcher name = name_pattern.matcher(line);
@@ -27,31 +33,31 @@ public class BlockItemUtils {
 			else {
 				Matcher readable_name = read_name_pattern.matcher(line);
 				if (readable_name.find())
-					entry.setName(readable_name.group(1));
+					blockItemEntry.setName(readable_name.group(1));
 				else {
 					Matcher texture = texture_pattern.matcher(line);
 					if (texture.find())
-						entry.setTexture(texture.group(1));
+						blockItemEntry.setTexture(texture.group(1));
 					else {
 						Matcher description = description_pattern.matcher(line);
 						if (description.find())
-							entry.setDescription(description.group(1));
+							blockItemEntry.setDescription(description.group(1));
 						else {
 							Matcher subtypes = subtypes_pattern.matcher(line);
 							if (subtypes.find())
-								entry.setSubtypes(subtypes.group(1).equals("true"));
+								blockItemEntry.setSubtypes(subtypes.group(1).equals("true"));
 							else {
 								Matcher type = type_pattern.matcher(line);
 								if (type.find())
 									switch (type.group(1)) {
-									case "block" -> entry.setType(Type.block);
-									case "item" -> entry.setType(Type.item);
+									case "block" -> blockItemEntry.setType(Type.block);
+									case "item" -> blockItemEntry.setType(Type.item);
 									}
 								else {
 									if (key != null)
-										entryList.put(key, entry);
+										entryList.put(key, blockItemEntry);
 									key = null;
-									entry = new Entry();
+									blockItemEntry = new BlockItemEntry();
 								}
 							}
 						}
@@ -61,7 +67,7 @@ public class BlockItemUtils {
 		}
 
 		if (key != null)
-			entryList.put(key, entry);
+			entryList.put(key, blockItemEntry);
 
 		return entryList;
 	}
@@ -108,9 +114,9 @@ public class BlockItemUtils {
 		return entryMap;
 	}
 
-	public static void compareBIMaps(LinkedHashMap<String, Entry> entryList, LinkedHashMap<String, MapEntry> entryMap,
-			ArrayList<String> blocks, ArrayList<String> blocksreg, ArrayList<String> items, ArrayList<String> itemsreg,
-			ArrayList<String> icons, boolean itemToBlockFallback) {
+	public static void compareBIMaps(LinkedHashMap<String, BlockItemEntry> entryList,
+			LinkedHashMap<String, MapEntry> entryMap, ArrayList<String> blocks, ArrayList<String> blocksreg,
+			ArrayList<String> items, ArrayList<String> itemsreg, ArrayList<String> icons, boolean itemToBlockFallback) {
 
 		System.out.println("################################################");
 		System.out.println("################################################");

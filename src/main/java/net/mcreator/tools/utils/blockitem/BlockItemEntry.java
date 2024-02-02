@@ -1,11 +1,11 @@
 package net.mcreator.tools.utils.blockitem;
 
-public class Entry {
+public class BlockItemEntry {
 	private String name, texture, description;
 	private Type type;
 	private boolean subtypes;
 
-	public Entry(String name, String texture, String description, boolean subtypes, Type type) {
+	public BlockItemEntry(String name, String texture, String description, boolean subtypes, Type type) {
 		this.name = name;
 		this.texture = texture;
 		this.description = description;
@@ -13,7 +13,7 @@ public class Entry {
 		this.type = type;
 	}
 
-	public Entry() {
+	public BlockItemEntry() {
 		this(null, null, null, false, null);
 	}
 
