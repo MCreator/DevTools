@@ -7,12 +7,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class BlockItemUtils {
-	public static final Pattern BLOCK_CLASS_PATTERN = Pattern.compile("public static final Block (.*?) = ");
-	public static final Pattern ITEM_CLASS_PATTERN = Pattern.compile("public static final Item (.*?) = ");
+	public static final Pattern BLOCK_CLASS_PATTERN = Pattern.compile("public static final Block ([A-Z0-9_].*?)[; ]");
+	public static final Pattern ITEM_CLASS_PATTERN = Pattern.compile("public static final Item ([A-Z0-9_].*?)[; ]");
 	public static final Pattern BLOCK_REGISTRY_PATTERN = Pattern.compile(
-			"public static final Block .*? = register\\(\"(.*?)\", ");
+			" .*? = register\\((?:\\(String\\))?\"(.*?)\", ");
 	public static final Pattern ITEM_REGISTRY_PATTERN = Pattern.compile(
-			"public static final Item .*? = registerItem\\(\"(.*?)\", ");
+			" .*? = registerItem\\((?:\\(String\\))?\"(.*?)\", ");
 	private static final Pattern name_pattern = Pattern.compile("- (.*):");
 	private static final Pattern read_name_pattern = Pattern.compile(" {2}readable_name: \"(.*)\"");
 	private static final Pattern texture_pattern = Pattern.compile(" {2}texture: (.*)");

@@ -10,9 +10,9 @@ import java.util.regex.Pattern;
 public class ParticleUtils {
 
 	public static final Pattern PARTICLE_CLASS_PATTERN = Pattern.compile(
-			"public static final SimpleParticleType (.*?) = register.*\\(\".*\"");
+			"public static final SimpleParticleType ([A-Z0-9_].*?)[; ]");
 	public static final Pattern PARTICLE_REGISTRY_PATTERN = Pattern.compile(
-			"public static final SimpleParticleType .*? = register.*\\(\"(.*)\"");
+			".*? = register\\((?:\\(String\\))?\"(.*?)\", ");
 	private static final Pattern map_name_pattern = Pattern.compile("(.*):");
 	private static final Pattern class_name_pattern = Pattern.compile(" {2}- ParticleTypes\\.(.*)");
 	private static final Pattern registry_name_pattern = Pattern.compile(" {2}- \"(.*)\"");

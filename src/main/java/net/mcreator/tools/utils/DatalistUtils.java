@@ -3,6 +3,7 @@ package net.mcreator.tools.utils;
 import net.mcreator.io.FileIO;
 import net.mcreator.tools.utils.blockitem.RegistryUtils;
 import net.mcreator.tools.utils.blockitem.TextureUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -18,12 +19,12 @@ public class DatalistUtils {
 	public static final Pattern SOUNDS_CLASS_PATTERN = Pattern.compile(
 			"(?:Holder.Reference<SoundEvent>|SoundEvent) .* = (?:register|registerForHolder)\\(\"(.*)\"\\);");
 	public static final Pattern ENTITY_CLASS_PATTERN = Pattern.compile(
-			"public static final EntityType<(.+)> (.+) = register\\(\"(.+)\", EntityType");
+			"public static final EntityType<(.+)>\\s*([A-Z_0_9]+)\\s*=\\s*register\\(\\s*\"(.+)\",\\s*EntityType");
+	public static final Pattern SCREENS_CLASS_PATTERN = Pattern.compile("public (?:abstract )?class .* extends (.*Screen.*) ");
 
 	public static ArrayList<String> readFileAsList(URL path) {
 		try {
-			return new ArrayList<>(
-					Arrays.asList(FileIO.readFileToString(new File(path.toURI())).split("\\r?\\n")));
+			return new ArrayList<>(Arrays.asList(FileIO.readFileToString(new File(path.toURI())).split("\\r?\\n")));
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
@@ -116,5 +117,34 @@ public class DatalistUtils {
 			e.printStackTrace();
 		}
 		return registry;
+	}
+
+	public static ArrayList<String> loadListFromFileStructure(URL root, Pattern classPattern) {
+		ArrayList<String> registry = new ArrayList<>();
+		try {
+			registry = listFolderAsClassList("", new File(root.toURI()), classPattern);
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return registry;
+	}
+
+	private static ArrayList<String> listFolderAsClassList(String prefix, File folder, Pattern classPattern) {
+		ArrayList<String> registryItems = new ArrayList<>();
+
+		File[] files = folder.listFiles();
+
+		if (files != null)
+			for (File f : files) {
+				if (f.isDirectory())
+					registryItems.addAll(listFolderAsClassList(prefix, f, classPattern));
+				else {
+					Matcher m = classPattern.matcher(FileIO.readFileToString(f));
+					if (m.find())
+						registryItems.add(prefix + FilenameUtils.getBaseName(f.getName()));
+				}
+			}
+
+		return registryItems;
 	}
 }

@@ -12,11 +12,11 @@ import java.util.LinkedHashMap;
 
 public class ComparisonTool {
 
-	private static final Compare WHAT = Compare.BLOCK_ITEM;
+	private static final Compare WHAT = Compare.SCREENS;
 	private static final boolean ITEM_TO_BLOCK_FALLBACK = true;
 
 	public enum Compare {
-		LIST, MAP, BLOCK_ITEM, BLOCK_ITEM_LEGACY, SOUND_MAP, ENTITY_MAP, ADVANCEMENT_MAP, PARTICLE_MAP, NONE
+		LIST, MAP, BLOCK_ITEM, BLOCK_ITEM_LEGACY, SOUND_MAP, ENTITY_MAP, ADVANCEMENT_MAP, PARTICLE_MAP, SCREENS, NONE
 	}
 
 	public static void main(String[] args) {
@@ -126,6 +126,15 @@ public class ComparisonTool {
 					ParticleUtils.PARTICLE_REGISTRY_PATTERN);
 
 			MappingUtils.compareRegistryMaps(mcr, particleMap, particleClasses, particleRegistry);
+		}
+		case SCREENS -> {
+			mcr = DatalistUtils.readListFromFile(ClassLoader.getSystemClassLoader().getResource("lists/mcreator"));
+			min = DatalistUtils.loadListFromFileStructure(
+					ClassLoader.getSystemClassLoader().getResource("lists/classes/sauce/net/minecraft/"),
+					DatalistUtils.SCREENS_CLASS_PATTERN);
+			LinkedHashMap<String, String> mcrmap = MappingUtils.readSimpleMapFromFile(
+					ClassLoader.getSystemClassLoader().getResource("maps/mcreator"));
+			MappingUtils.compareSimpleMaps(mcr, mcrmap, min);
 		}
 		default -> System.out.println("No comparison selected/DEBUG mode");
 		}
