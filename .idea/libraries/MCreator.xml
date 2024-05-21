@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="MCreator">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../MCreator" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../MCreator/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../MCreator/src/test/java" />
+    </SOURCES>
+  </library>
+</component>

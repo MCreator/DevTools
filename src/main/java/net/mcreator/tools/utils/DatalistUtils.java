@@ -8,7 +8,6 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class DatalistUtils {
 	public static final Pattern SOUNDS_CLASS_PATTERN = Pattern.compile(
-			"(?:Holder.Reference<SoundEvent>|SoundEvent) .* = (?:register|registerForHolder)\\(\"(.*)\"\\);");
+			"(?:Holder(?:\\.Reference)?<SoundEvent>|SoundEvent) .* = (?:register|registerForHolder)\\(\"(.*)\"\\);");
 	public static final Pattern ENTITY_CLASS_PATTERN = Pattern.compile(
 			"public static final EntityType<(.+)>\\s*([A-Z_0_9]+)\\s*=\\s*register\\(\\s*\"(.+)\",\\s*EntityType");
 	public static final Pattern SCREENS_CLASS_PATTERN = Pattern.compile("public (?:abstract )?class .* extends (.*Screen.*) ");

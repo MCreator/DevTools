@@ -6,11 +6,13 @@ While this project isn't much on its own, it can significantly reduce the time y
 
 In case you have any of your own scripts for MCreator development lying around, you're welcome to open a pull request and we'll add them here for others to use.
 
-## How do I use this?
-### Prerequisites
-For this to work, you need:
-* a working MCreator installation (currently Windows only, default install location).
-* Intellij Idea IDE with this repo open as a project (no gradle target/task for launching the ComparisonTool atm.)
+### Setup
+
+In order for this tool to work, make a new file called `gradle.properties` with the following contents:
+
+```
+mcreator_path=<path to MCreator core Gradle project directory>
+```
 
 ### Resource structure
 Resources folder has a fixed structure, but you may not need all the files for it to work (more on that in specific chapters below). In `img` you should put block/item images from MCreator core you are updating. In the `lists` folder you put the MCreator list you are testing and name it `mcreator`. File named `minecraft` is where you put stripped Minecraft list of entries. The maps folder takes the corresponding map named `mcreator`.
