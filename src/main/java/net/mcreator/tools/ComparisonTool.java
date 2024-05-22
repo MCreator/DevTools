@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 
 public class ComparisonTool {
 
-	private static final Compare WHAT = Compare.SOUND_MAP;
+	private static final Compare WHAT = Compare.PARTICLE_MAP;
 	private static final boolean ITEM_TO_BLOCK_FALLBACK = true;
 
 	public enum Compare {
