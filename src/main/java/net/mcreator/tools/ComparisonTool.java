@@ -12,7 +12,9 @@ import java.util.LinkedHashMap;
 
 public class ComparisonTool {
 
-	private static final Compare WHAT = Compare.PARTICLE_MAP;
+	// Use regex (?<!;)\n to compact java source code for parsers
+
+	private static final Compare WHAT = Compare.BLOCK_ITEM;
 	private static final boolean ITEM_TO_BLOCK_FALLBACK = true;
 
 	public enum Compare {
@@ -130,7 +132,7 @@ public class ComparisonTool {
 		case SCREENS -> {
 			mcr = DatalistUtils.readListFromFile(ClassLoader.getSystemClassLoader().getResource("lists/mcreator"));
 			min = DatalistUtils.loadListFromFileStructure(
-					ClassLoader.getSystemClassLoader().getResource("lists/classes/sauce/net/minecraft/"),
+					ClassLoader.getSystemClassLoader().getResource("lists/classes/src/net/minecraft/"),
 					DatalistUtils.SCREENS_CLASS_PATTERN);
 			LinkedHashMap<String, String> mcrmap = MappingUtils.readSimpleMapFromFile(
 					ClassLoader.getSystemClassLoader().getResource("maps/mcreator"));

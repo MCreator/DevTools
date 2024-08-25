@@ -19,7 +19,7 @@ public class DatalistUtils {
 			"(?:Holder(?:\\.Reference)?<SoundEvent>|SoundEvent) .* = (?:register|registerForHolder)\\(\"(.*)\"\\);");
 	public static final Pattern ENTITY_CLASS_PATTERN = Pattern.compile(
 			"public static final EntityType<(.+)>\\s*([A-Z_0_9]+)\\s*=\\s*register\\(\\s*\"(.+)\",\\s*EntityType");
-	public static final Pattern SCREENS_CLASS_PATTERN = Pattern.compile("public (?:abstract )?class .* extends (.*Screen.*) ");
+	public static final Pattern SCREENS_CLASS_PATTERN = Pattern.compile("public (?:abstract )?class .* extends (?!.*HasCustomInventoryScreen)(.*Screen.*) ");
 
 	public static ArrayList<String> readFileAsList(URL path) {
 		try {
