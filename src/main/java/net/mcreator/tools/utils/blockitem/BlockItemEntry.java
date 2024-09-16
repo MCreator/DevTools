@@ -64,5 +64,5 @@ public class BlockItemEntry {
 }
 
 enum Type {
-	block, item
+	block, item, block_without_item
 }

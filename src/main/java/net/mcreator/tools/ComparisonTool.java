@@ -15,7 +15,6 @@ public class ComparisonTool {
 	// Use regex (?<!;)\n to compact java source code for parsers
 
 	private static final Compare WHAT = Compare.BLOCK_ITEM;
-	private static final boolean ITEM_TO_BLOCK_FALLBACK = true;
 
 	public enum Compare {
 		LIST, MAP, BLOCK_ITEM, BLOCK_ITEM_LEGACY, SOUND_MAP, ENTITY_MAP, ADVANCEMENT_MAP, PARTICLE_MAP, SCREENS, NONE
@@ -79,8 +78,7 @@ public class ComparisonTool {
 
 			ArrayList<String> icons = DatalistUtils.listTextures("img");
 
-			BlockItemUtils.compareBIMaps(bilist, bimap, blocks, blocksreg, items, itemsreg, icons,
-					ITEM_TO_BLOCK_FALLBACK);
+			BlockItemUtils.compareBIMaps(bilist, bimap, blocks, blocksreg, items, itemsreg, icons);
 		}
 		case BLOCK_ITEM_LEGACY -> {
 			LinkedHashMap<String, BlockItemEntry> bilist = BlockItemUtils.parseList(
@@ -103,8 +101,7 @@ public class ComparisonTool {
 
 			ArrayList<String> icons = DatalistUtils.listTextures("img");
 
-			BlockItemUtils.compareBIMaps(bilist, bimap, blocks, blocksreg, items, itemsreg, icons,
-					ITEM_TO_BLOCK_FALLBACK);
+			BlockItemUtils.compareBIMaps(bilist, bimap, blocks, blocksreg, items, itemsreg, icons);
 		}
 		case ADVANCEMENT_MAP -> {
 			mcr = DatalistUtils.readListFromFile(ClassLoader.getSystemClassLoader().getResource("lists/mcreator"));

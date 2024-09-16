@@ -52,6 +52,7 @@ public class BlockItemUtils {
 									switch (type.group(1)) {
 									case "block" -> blockItemEntry.setType(Type.block);
 									case "item" -> blockItemEntry.setType(Type.item);
+									case "block_without_item" -> blockItemEntry.setType(Type.block_without_item);
 									}
 								else {
 									if (key != null)
@@ -116,7 +117,7 @@ public class BlockItemUtils {
 
 	public static void compareBIMaps(LinkedHashMap<String, BlockItemEntry> entryList,
 			LinkedHashMap<String, MapEntry> entryMap, ArrayList<String> blocks, ArrayList<String> blocksreg,
-			ArrayList<String> items, ArrayList<String> itemsreg, ArrayList<String> icons, boolean itemToBlockFallback) {
+			ArrayList<String> items, ArrayList<String> itemsreg, ArrayList<String> icons) {
 
 		System.out.println("################################################");
 		System.out.println("################################################");
@@ -156,7 +157,7 @@ public class BlockItemUtils {
 		System.out.println("         MCreator is missing:");
 		System.out.println("----------------------------------------\n");
 		for (String e : joinedClasses)
-			if (!classes.contains(e) && !(itemToBlockFallback && e.startsWith("Items.") && classes.contains(
+			if (!classes.contains(e) && !(e.startsWith("Items.") && classes.contains(
 					"Blocks." + e.substring(6))))
 				System.out.println(e);
 		System.out.println("\n----------------------------------------");
@@ -175,7 +176,8 @@ public class BlockItemUtils {
 		System.out.println("################################################");
 
 		ArrayList<String> filteredblocks = entryList.entrySet().parallelStream()
-				.filter(e -> e.getValue().getType() == Type.block).map(e -> entryMap.get(e.getKey()).getRegistryName())
+				.filter(e -> (e.getValue().getType() == Type.block || e.getValue().getType() == Type.block_without_item))
+                .map(e -> entryMap.get(e.getKey()).getRegistryName())
 				.collect(Collectors.toCollection(ArrayList::new));
 
 		System.out.println("----------------------------------------");
