@@ -9,6 +9,7 @@ import net.mcreator.tools.utils.blockitem.MapEntry;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public class ComparisonTool {
 
@@ -17,7 +18,7 @@ public class ComparisonTool {
 	private static final Compare WHAT = Compare.BLOCK_ITEM;
 
 	public enum Compare {
-		LIST, MAP, BLOCK_ITEM, BLOCK_ITEM_LEGACY, SOUND_MAP, ENTITY_MAP, ADVANCEMENT_MAP, PARTICLE_MAP, SCREENS, NONE
+		LIST, MAP, BLOCK_ITEM, SOUND_MAP, ENTITY_MAP, ADVANCEMENT_MAP, PARTICLE_MAP, SCREENS, NONE
 	}
 
 	public static void main(String[] args) {
@@ -76,28 +77,11 @@ public class ComparisonTool {
 					ClassLoader.getSystemClassLoader().getResource("lists/classes/Items.java"),
 					BlockItemUtils.ITEM_REGISTRY_PATTERN);
 
-			ArrayList<String> icons = DatalistUtils.listTextures("img");
+			List<String> blockItems = DatalistUtils.extractMatchListFromClass(
+					ClassLoader.getSystemClassLoader().getResource("lists/classes/Items.java"),
+					BlockItemUtils.BLOCKITEM_REGISTRY_PATTERN).stream().map(String::toLowerCase).toList();
 
-			BlockItemUtils.compareBIMaps(bilist, bimap, blocks, blocksreg, items, itemsreg, icons);
-		}
-		case BLOCK_ITEM_LEGACY -> {
-			LinkedHashMap<String, BlockItemEntry> bilist = BlockItemUtils.parseList(
-					DatalistUtils.readListFromFile(ClassLoader.getSystemClassLoader().getResource("lists/mcreator")));
-
-			LinkedHashMap<String, MapEntry> bimap = BlockItemUtils.parseMap(
-					DatalistUtils.readListFromFile(ClassLoader.getSystemClassLoader().getResource("maps/mcreator")));
-
-			ArrayList<String> blocks = DatalistUtils.readListFromFile(
-					ClassLoader.getSystemClassLoader().getResource("lists/blockitem/blocks"));
-
-			ArrayList<String> blocksreg = DatalistUtils.readListFromFile(
-					ClassLoader.getSystemClassLoader().getResource("lists/blockitem/blocksreg"));
-
-			ArrayList<String> items = DatalistUtils.readListFromFile(
-					ClassLoader.getSystemClassLoader().getResource("lists/blockitem/items"));
-
-			ArrayList<String> itemsreg = DatalistUtils.readListFromFile(
-					ClassLoader.getSystemClassLoader().getResource("lists/blockitem/itemsreg"));
+			itemsreg.addAll(blockItems);
 
 			ArrayList<String> icons = DatalistUtils.listTextures("img");
 
