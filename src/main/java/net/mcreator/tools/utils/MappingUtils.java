@@ -21,6 +21,34 @@ public class MappingUtils {
 		return null;
 	}
 
+	public static LinkedHashMap<String, String> readComplexMapFromFile(URL path, int tableIndex) {
+		LinkedHashMap<String, String> mapList = new LinkedHashMap<>();
+
+		try {
+			String currentKey = null;
+			int currentIndex = 0;
+			for (String line : FileIO.readFileToString(new File(path.toURI())).split("\\r?\\n")) {
+				if (line.contains(":")) {
+					String[] split = line.split(": ");
+					currentKey = split[0].replace(":", "");
+					currentIndex = 0;
+					if (split.length > 1 && tableIndex == 0) {
+						mapList.put(currentKey, split[1]);
+						currentKey = null;
+					}
+				} else if (currentKey != null) {
+					if (currentIndex == tableIndex)
+						mapList.put(currentKey, line.replace("  - ", ""));
+					currentIndex++;
+				}
+			}
+			return mapList;
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public static ArrayList<LinkedHashMap<String, String>> readEntityMapFromFile(URL path) {
 		ArrayList<LinkedHashMap<String, String>> mapList = new ArrayList<>();
 		mapList.add(new LinkedHashMap<>());
