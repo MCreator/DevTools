@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 public class BlockItemUtils {
     public static final Pattern BLOCK_CLASS_PATTERN = Pattern.compile("public static final Block ([A-Z0-9_].*?)[; ]");
     public static final Pattern ITEM_CLASS_PATTERN = Pattern.compile("public static final Item ([A-Z0-9_].*?)[; ]");
-    public static final Pattern BLOCK_REGISTRY_PATTERN = Pattern.compile(" .*? = register\\(\"(.*?)\", ");
-    public static final Pattern ITEM_REGISTRY_PATTERN = Pattern.compile(" .*? = registerItem\\(\"(.*?)\", ");
-    public static final Pattern BLOCKITEM_REGISTRY_PATTERN = Pattern.compile("Item (.*?) = registerBlock\\(");
+    public static final Pattern BLOCK_REGISTRY_PATTERN = Pattern.compile(" .*? = register\\w*\\( *\"(.*?)\"");
+    public static final Pattern ITEM_REGISTRY_PATTERN = Pattern.compile(" .*? = registerItem\\(+ *\"(.*?)\"");
+    public static final Pattern BLOCKITEM_REGISTRY_PATTERN = Pattern.compile("Item (.*?) = registerBlock\\( *");
     private static final Pattern name_pattern = Pattern.compile("- (.*):");
     private static final Pattern read_name_pattern = Pattern.compile(" {2}readable_name: \"(.*)\"");
     private static final Pattern texture_pattern = Pattern.compile(" {2}texture: (.*)");

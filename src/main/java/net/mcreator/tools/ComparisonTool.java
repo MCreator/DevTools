@@ -15,7 +15,7 @@ public class ComparisonTool {
 
     // Use regex (?<!;)\n to compact java source code for parsers
 
-    private static final Compare WHAT = Compare.BLOCKSTATEPROPERTIES;
+    private static final Compare WHAT = Compare.BLOCK_ITEM;
 
     public enum Compare {
         LIST, MAP, BLOCK_ITEM, SOUND_MAP, ENTITY_MAP, ADVANCEMENT_MAP, PARTICLE_MAP, SCREENS, BLOCKSTATEPROPERTIES
