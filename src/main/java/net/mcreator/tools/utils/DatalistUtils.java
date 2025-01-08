@@ -15,6 +15,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class DatalistUtils {
+
+    // Use regex (?<!;)\n to compact java source code for parsers
+
     public static final Pattern SOUNDS_CLASS_PATTERN = Pattern.compile(
             "(?:Holder(?:\\.Reference)?<SoundEvent>|SoundEvent) .* = (?:register|registerForHolder)\\(\"(.*)\"\\);");
     public static final Pattern ENTITY_CLASS_PATTERN = Pattern.compile(
@@ -22,6 +25,8 @@ public class DatalistUtils {
     public static final Pattern SCREENS_CLASS_PATTERN = Pattern.compile("public (?:abstract )?class .* extends (?!.*HasCustomInventoryScreen)(.*Screen.*) ");
     public static final Pattern BLOCKSTATEPROPERTY_CLASS_PATTERN = Pattern.compile(
             "public static final (?:Boolean|Enum|Direction|Integer)Property(?:<.+>)?\\s?([_A-Z0-9]+)\\s*=.*?\\((\\s*\"(.+)\")");
+    public static final Pattern ENCHANTMENT_CLASS_PATTERN = Pattern.compile(
+            "public static final ResourceKey<Enchantment> \\s?([_A-Z0-9]+)\\s*=.*?\\((\\s*\"(.+)\")");
 
     public static ArrayList<String> readFileAsList(URL path) {
         try {
@@ -74,6 +79,7 @@ public class DatalistUtils {
     public static ArrayList<ArrayList<String>> extractEntityListFromClass(URL path) {
         try {
             String file = FileIO.readFileToString(new File(path.toURI()));
+            file = file.replaceAll("(?<!;)\n", "");
             return new ArrayList<>(Arrays.asList(ENTITY_CLASS_PATTERN.matcher(file).results().map(m -> m.group(1))
                             .collect(Collectors.toCollection(ArrayList::new)),
                     ENTITY_CLASS_PATTERN.matcher(file).results().map(m -> "EntityType." + m.group(2))

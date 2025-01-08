@@ -13,12 +13,10 @@ import java.util.List;
 
 public class ComparisonTool {
 
-    // Use regex (?<!;)\n to compact java source code for parsers
-
-    private static final Compare WHAT = Compare.BLOCK_ITEM;
+    private static final Compare WHAT = Compare.ENCHANTMENT_MAP;
 
     public enum Compare {
-        LIST, MAP, BLOCK_ITEM, SOUND_MAP, ENTITY_MAP, ADVANCEMENT_MAP, PARTICLE_MAP, SCREENS, BLOCKSTATEPROPERTIES
+        LIST, MAP, BLOCK_ITEM, SOUND_MAP, ENTITY_MAP, ADVANCEMENT_MAP, PARTICLE_MAP, SCREENS, BLOCKSTATEPROPERTIES, ENCHANTMENT_MAP
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -132,6 +130,26 @@ public class ComparisonTool {
                         ParticleUtils.PARTICLE_REGISTRY_PATTERN);
 
                 MappingUtils.compareRegistryMaps(mcr, particleMap, particleClasses, particleRegistry);
+            }
+            case ENCHANTMENT_MAP -> {
+                mcr = DatalistUtils.readListFromFile(ClassLoader.getSystemClassLoader().getResource("lists/mcreator"));
+
+                LinkedHashMap<String, String> mcrmap = new LinkedHashMap<>();
+                MappingUtils.readComplexMapFromFile(
+                                ClassLoader.getSystemClassLoader().getResource("maps/mcreator"), 0)
+                        .forEach((key, value) -> mcrmap.put(key, value.replace("Enchantments.", "")));
+                mc = DatalistUtils.extractMatchListFromClass(
+                        ClassLoader.getSystemClassLoader().getResource("lists/classes/Enchantments.java"),
+                        DatalistUtils.ENCHANTMENT_CLASS_PATTERN);
+                MappingUtils.compareSimpleMaps(mcr, mcrmap, mc);
+
+                LinkedHashMap<String, String> mcrmap2 = new LinkedHashMap<>(MappingUtils.readComplexMapFromFile(
+                        ClassLoader.getSystemClassLoader().getResource("maps/mcreator"), 1));
+                mc = DatalistUtils.extractMatchListFromClass(
+                        ClassLoader.getSystemClassLoader().getResource("lists/classes/Enchantments.java"),
+                        DatalistUtils.ENCHANTMENT_CLASS_PATTERN, 2).stream().map(e -> e.replaceAll("\"", "")
+                        .trim()).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+                MappingUtils.compareSimpleMaps(mcr, mcrmap2, mc);
             }
             case SCREENS -> {
                 mcr = DatalistUtils.readListFromFile(ClassLoader.getSystemClassLoader().getResource("lists/mcreator"));
