@@ -21,7 +21,7 @@ public class DatalistUtils {
     public static final Pattern SOUNDS_CLASS_PATTERN = Pattern.compile(
             "(?:Holder(?:\\.Reference)?<SoundEvent>|SoundEvent) .* = (?:register|registerForHolder)\\(\"(.*)\"\\);");
     public static final Pattern ENTITY_CLASS_PATTERN = Pattern.compile(
-            "public static final EntityType<(.+)>\\s*([A-Z0-9]+)\\s*=\\s*register\\(\\s*\"(.+)\",\\s*EntityType");
+            "public static final EntityType<(.+)>\\s*([A-Z0-9_]+)\\s*=\\s*register\\(\\s*\"(.+)\",\\s*EntityType");
     public static final Pattern SCREENS_CLASS_PATTERN = Pattern.compile("public (?:abstract )?class .* extends (?!.*HasCustomInventoryScreen)(.*Screen.*) ");
     public static final Pattern BLOCKSTATEPROPERTY_CLASS_PATTERN = Pattern.compile(
             "public static final (?:Boolean|Enum|Direction|Integer)Property(?:<.+>)?\\s?([_A-Z0-9]+)\\s*=.*?\\((\\s*\"(.+)\")");
