@@ -175,6 +175,7 @@ public class BlockItemUtils {
         System.out.println("################################################");
 
         ArrayList<String> filteredblocks = entryList.entrySet().parallelStream()
+                .filter(e -> entryMap.get(e.getKey()) != null)
                 .filter(e -> (e.getValue().getType() == Type.block || e.getValue().getType() == Type.block_without_item))
                 .map(e -> entryMap.get(e.getKey()).getRegistryName())
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -201,6 +202,7 @@ public class BlockItemUtils {
         System.out.println("################################################");
 
         ArrayList<String> filteredItems = entryList.entrySet().parallelStream()
+                .filter(e -> entryMap.get(e.getKey()) != null)
                 .filter(e -> (e.getValue().getType() == Type.item || e.getValue().getType() == Type.block)).map(e -> {
                     if (!entryMap.containsKey(e.getKey()))
                         System.out.println(e.getKey());
