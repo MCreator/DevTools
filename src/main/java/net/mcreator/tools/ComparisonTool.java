@@ -13,10 +13,10 @@ import java.util.List;
 
 public class ComparisonTool {
 
-    private static final Compare WHAT = Compare.ENCHANTMENT_MAP;
+    private static final Compare WHAT = Compare.ENTITY_MAP;
 
     public enum Compare {
-        LIST, MAP, BLOCK_ITEM, SOUND_MAP, ENTITY_MAP, ADVANCEMENT_MAP, PARTICLE_MAP, SCREENS, BLOCKSTATEPROPERTIES, ENCHANTMENT_MAP
+        LIST, MAP, MAP_WITH_COMPLEX_LIST, BLOCK_ITEM, SOUND_MAP, ENTITY_MAP, ADVANCEMENT_MAP, PARTICLE_MAP, SCREENS, BLOCKSTATEPROPERTIES, ENCHANTMENT_MAP
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -30,6 +30,13 @@ public class ComparisonTool {
             }
             case MAP -> {
                 mcr = DatalistUtils.readListFromFile(ClassLoader.getSystemClassLoader().getResource("lists/mcreator"));
+                mc = DatalistUtils.readListFromFile(ClassLoader.getSystemClassLoader().getResource("lists/minecraft"));
+                LinkedHashMap<String, String> mcrmap = MappingUtils.readSimpleMapFromFile(
+                        ClassLoader.getSystemClassLoader().getResource("maps/mcreator"));
+                MappingUtils.compareSimpleMaps(mcr, mcrmap, mc);
+            }
+            case MAP_WITH_COMPLEX_LIST -> {
+                mcr = DatalistUtils.readListFromFileComplex(ClassLoader.getSystemClassLoader().getResource("lists/mcreator"));
                 mc = DatalistUtils.readListFromFile(ClassLoader.getSystemClassLoader().getResource("lists/minecraft"));
                 LinkedHashMap<String, String> mcrmap = MappingUtils.readSimpleMapFromFile(
                         ClassLoader.getSystemClassLoader().getResource("maps/mcreator"));
