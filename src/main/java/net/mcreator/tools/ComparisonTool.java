@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ComparisonTool {
 
-    private static final Compare WHAT = Compare.ENTITY_MAP;
+    private static final Compare WHAT = Compare.SOUND_MAP;
 
     public enum Compare {
         LIST, MAP, MAP_WITH_COMPLEX_LIST, BLOCK_ITEM, SOUND_MAP, ENTITY_MAP, ADVANCEMENT_MAP, PARTICLE_MAP, SCREENS, BLOCKSTATEPROPERTIES, ENCHANTMENT_MAP
@@ -44,9 +44,21 @@ public class ComparisonTool {
             }
             case SOUND_MAP -> {
                 mcr = DatalistUtils.readListFromFile(ClassLoader.getSystemClassLoader().getResource("lists/mcreator"));
+
                 mc = DatalistUtils.extractMatchListFromClass(
                         ClassLoader.getSystemClassLoader().getResource("lists/classes/SoundEvents.java"),
                         DatalistUtils.SOUNDS_CLASS_PATTERN);
+                // Add wolf sounds that are dynamically loaded in MC code
+                for (String suffix : List.of("", "_puglin", "_sad", "_angry", "_grumpy", "_big", "_cute")) {
+                    for (String soundType : List.of("ambient", "death", "growl", "hurt", "pant", "whine")) {
+                        mc.add("entity.wolf" + suffix + "." + soundType);
+                    }
+                }
+                // Add goat horn sounds that are dynamically loaded in MC code
+                for (int i : List.of(0, 1, 2, 3, 4, 5, 6, 7)) {
+                    mc.add("item.goat_horn.sound." + i);
+                }
+
                 LinkedHashMap<String, String> mcrmap = MappingUtils.readSimpleMapFromFile(
                         ClassLoader.getSystemClassLoader().getResource("maps/mcreator"));
                 MappingUtils.compareSimpleMaps(mcr, mcrmap, mc);
