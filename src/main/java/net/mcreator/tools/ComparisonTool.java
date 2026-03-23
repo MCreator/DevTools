@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ComparisonTool {
 
-    private static final Compare WHAT = Compare.SOUND_MAP;
+    private static final Compare WHAT = Compare.BLOCK_ITEM;
 
     public enum Compare {
         LIST, MAP, MAP_WITH_COMPLEX_LIST, BLOCK_ITEM, SOUND_MAP, ENTITY_MAP, ADVANCEMENT_MAP, PARTICLE_MAP, SCREENS, BLOCKSTATEPROPERTIES, ENCHANTMENT_MAP
@@ -120,8 +120,12 @@ public class ComparisonTool {
                 List<String> blockItems = DatalistUtils.extractMatchListFromClass(
                         ClassLoader.getSystemClassLoader().getResource("lists/classes/Items.java"),
                         BlockItemUtils.BLOCKITEM_REGISTRY_PATTERN).stream().map(String::toLowerCase).toList();
-
                 itemsreg.addAll(blockItems);
+
+                List<String> spawnEggItems = DatalistUtils.extractMatchListFromClass(
+                        ClassLoader.getSystemClassLoader().getResource("lists/classes/Items.java"),
+                        BlockItemUtils.SPAWNEGGITEM_REGISTRY_PATTERN).stream().map(String::toLowerCase).toList();
+                itemsreg.addAll(spawnEggItems);
 
                 ArrayList<String> icons = DatalistUtils.listTextures("img");
 
