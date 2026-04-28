@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ComparisonTool {
 
-    private static final Compare WHAT = Compare.BLOCK_ITEM;
+    private static final Compare WHAT = Compare.BLOCKSTATEPROPERTIES;
 
     public enum Compare {
         LIST, MAP, MAP_WITH_COMPLEX_LIST, BLOCK_ITEM, SOUND_MAP, ENTITY_MAP, ADVANCEMENT_MAP, PARTICLE_MAP, SCREENS, BLOCKSTATEPROPERTIES, ENCHANTMENT_MAP
