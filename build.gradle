@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'idea'
 }
 
 group 'org.example'
@@ -11,6 +12,12 @@ repositories {
     mavenCentral()
     maven { url "https://repo.gradle.org/gradle/libs-releases" } // for gradle-tooling-api
     flatDir { dirs mcreator_path + '/lib' }
+}
+
+// MCreator's build script configures idea.project, which only exists on the root project. As MCreator is included
+// here as a subproject, share this root project's IDEA project model with it so its configuration does not fail
+project(':MCreator').plugins.withType(IdeaPlugin).configureEach { ideaPlugin ->
+    ideaPlugin.model.project = rootProject.idea.project
 }
 
 dependencies {

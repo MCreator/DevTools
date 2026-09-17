@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ComparisonTool {
 
-    private static final Compare WHAT = Compare.BLOCKSTATEPROPERTIES;
+    private static final Compare WHAT = Compare.SCREENS;
 
     public enum Compare {
         LIST, MAP, MAP_WITH_COMPLEX_LIST, BLOCK_ITEM, SOUND_MAP, ENTITY_MAP, ADVANCEMENT_MAP, PARTICLE_MAP, SCREENS, BLOCKSTATEPROPERTIES, ENCHANTMENT_MAP
@@ -177,7 +177,7 @@ public class ComparisonTool {
             case SCREENS -> {
                 mcr = DatalistUtils.readListFromFile(ClassLoader.getSystemClassLoader().getResource("lists/mcreator"));
                 mc = DatalistUtils.loadListFromFileStructure(
-                        ClassLoader.getSystemClassLoader().getResource("lists/classes/src/net/minecraft/"),
+                        ClassLoader.getSystemClassLoader().getResource("lists/classes/net/minecraft/"),
                         DatalistUtils.SCREENS_CLASS_PATTERN);
                 LinkedHashMap<String, String> mcrmap = MappingUtils.readSimpleMapFromFile(
                         ClassLoader.getSystemClassLoader().getResource("maps/mcreator"));
