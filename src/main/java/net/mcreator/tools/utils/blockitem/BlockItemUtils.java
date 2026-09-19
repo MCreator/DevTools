@@ -2,6 +2,9 @@ package net.mcreator.tools.utils.blockitem;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -9,16 +12,60 @@ import java.util.stream.Collectors;
 public class BlockItemUtils {
     public static final Pattern BLOCK_CLASS_PATTERN = Pattern.compile("public static final Block ([A-Z0-9_].*?)[; ]");
     public static final Pattern ITEM_CLASS_PATTERN = Pattern.compile("public static final Item ([A-Z0-9_].*?)[; ]");
-    public static final Pattern BLOCK_REGISTRY_PATTERN = Pattern.compile(" .*? = register\\w*\\( *\"(.*?)\"");
-    public static final Pattern ITEM_REGISTRY_PATTERN = Pattern.compile(" .*? = registerItem\\(+ *\"(.*?)\"");
-    public static final Pattern BLOCKITEM_REGISTRY_PATTERN = Pattern.compile("Item (.*?) = registerBlock\\( *");
-    public static final Pattern SPAWNEGGITEM_REGISTRY_PATTERN = Pattern.compile("Item (.*?) = registerSpawnEgg\\( *");
+    // Group 1 is collection type, group 2 is field name
+    public static final Pattern BLOCK_COLLECTION_PATTERN = Pattern.compile("public static final (\\w+)<Block> ([A-Z0-9_]+) =");
+    public static final Pattern ITEM_COLLECTION_PATTERN = Pattern.compile("public static final (\\w+)<Item> ([A-Z0-9_]+) =");
+    private static final List<String> COLLECTION_COLORS = List.of("white", "orange", "magenta", "lightBlue", "yellow",
+            "lime", "pink", "gray", "lightGray", "cyan", "purple", "blue", "brown", "green", "red", "black");
+    private static final List<String> COLLECTION_COPPER_STATES = List.of("unaffected", "exposed", "weathered", "oxidized");
+    // Fields where registry name does not match the field name in the MC code
+    private static final Map<String, String> FIELD_REGISTRY_NAME_OVERRIDES = Map.of(
+            "POTTED_AZALEA", "potted_azalea_bush",
+            "POTTED_FLOWERING_AZALEA", "potted_flowering_azalea_bush",
+            "DRY_SHORT_GRASS", "short_dry_grass",
+            "DRY_TALL_GRASS", "tall_dry_grass",
+            "CUT_STANDSTONE_SLAB", "cut_sandstone_slab");
     private static final Pattern name_pattern = Pattern.compile("- (.*):");
     private static final Pattern read_name_pattern = Pattern.compile(" {2}readable_name: \"(.*)\"");
     private static final Pattern texture_pattern = Pattern.compile(" {2}texture: (.*)");
     private static final Pattern description_pattern = Pattern.compile(" {2}description: \"(.*)\"");
     private static final Pattern subtypes_pattern = Pattern.compile(" {2}subtypes: (.*)");
     private static final Pattern type_pattern = Pattern.compile(" {2}type: (.*)");
+
+    public static ArrayList<String> toRegistryNames(ArrayList<String> fields) {
+        return fields.stream().map(e -> FIELD_REGISTRY_NAME_OVERRIDES.getOrDefault(e, e.toLowerCase(Locale.ROOT)))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public static void expandCollections(ArrayList<String> types, ArrayList<String> fields, ArrayList<String> classes,
+                                         ArrayList<String> registry) {
+        for (int i = 0; i < fields.size(); i++) {
+            String field = fields.get(i);
+            String name = field.toLowerCase(Locale.ROOT);
+            switch (types.get(i)) {
+                case "ColorCollection" -> {
+                    for (String color : COLLECTION_COLORS) {
+                        classes.add(field + "." + color + "()");
+                        registry.add(color.replaceAll("([A-Z])", "_$1").toLowerCase(Locale.ROOT) + "_"
+                                + name.replaceFirst("^dyed_", ""));
+                    }
+                }
+                case "WeatheringCopperCollection" -> {
+                    for (String waxed : List.of("weathering", "waxed")) {
+                        for (String state : COLLECTION_COPPER_STATES) {
+                            boolean unaffected = state.equals("unaffected");
+                            classes.add(field + "." + waxed + "()." + state + "()");
+                            // Only unaffected copper block has _block suffix
+                            registry.add((waxed.equals("waxed") ? "waxed_" : "") + (unaffected ? "" : state + "_")
+                                    + (name.equals("copper_block") && !unaffected ? "copper" : name));
+                        }
+                    }
+                }
+                default -> System.out.println(
+                        "WARNING: Unknown collection type " + types.get(i) + " of " + field + ", its members are skipped");
+            }
+        }
+    }
 
     public static LinkedHashMap<String, BlockItemEntry> parseList(ArrayList<String> list) {
         LinkedHashMap<String, BlockItemEntry> entryList = new LinkedHashMap<>();

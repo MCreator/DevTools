@@ -105,27 +105,33 @@ public class ComparisonTool {
                         ClassLoader.getSystemClassLoader().getResource("lists/classes/Blocks.java"),
                         BlockItemUtils.BLOCK_CLASS_PATTERN);
 
-                ArrayList<String> blocksreg = DatalistUtils.extractMatchListFromClass(
+                ArrayList<String> blocksreg = BlockItemUtils.toRegistryNames(blocks);
+
+                ArrayList<String> blockCollectionTypes = DatalistUtils.extractMatchListFromClass(
                         ClassLoader.getSystemClassLoader().getResource("lists/classes/Blocks.java"),
-                        BlockItemUtils.BLOCK_REGISTRY_PATTERN);
+                        BlockItemUtils.BLOCK_COLLECTION_PATTERN, 1);
+
+                ArrayList<String> blockCollections = DatalistUtils.extractMatchListFromClass(
+                        ClassLoader.getSystemClassLoader().getResource("lists/classes/Blocks.java"),
+                        BlockItemUtils.BLOCK_COLLECTION_PATTERN, 2);
+
+                BlockItemUtils.expandCollections(blockCollectionTypes, blockCollections, blocks, blocksreg);
 
                 ArrayList<String> items = DatalistUtils.extractMatchListFromClass(
                         ClassLoader.getSystemClassLoader().getResource("lists/classes/Items.java"),
                         BlockItemUtils.ITEM_CLASS_PATTERN);
 
-                ArrayList<String> itemsreg = DatalistUtils.extractMatchListFromClass(
-                        ClassLoader.getSystemClassLoader().getResource("lists/classes/Items.java"),
-                        BlockItemUtils.ITEM_REGISTRY_PATTERN);
+                ArrayList<String> itemsreg = BlockItemUtils.toRegistryNames(items);
 
-                List<String> blockItems = DatalistUtils.extractMatchListFromClass(
+                ArrayList<String> itemCollectionTypes = DatalistUtils.extractMatchListFromClass(
                         ClassLoader.getSystemClassLoader().getResource("lists/classes/Items.java"),
-                        BlockItemUtils.BLOCKITEM_REGISTRY_PATTERN).stream().map(String::toLowerCase).toList();
-                itemsreg.addAll(blockItems);
+                        BlockItemUtils.ITEM_COLLECTION_PATTERN, 1);
 
-                List<String> spawnEggItems = DatalistUtils.extractMatchListFromClass(
+                ArrayList<String> itemCollections = DatalistUtils.extractMatchListFromClass(
                         ClassLoader.getSystemClassLoader().getResource("lists/classes/Items.java"),
-                        BlockItemUtils.SPAWNEGGITEM_REGISTRY_PATTERN).stream().map(String::toLowerCase).toList();
-                itemsreg.addAll(spawnEggItems);
+                        BlockItemUtils.ITEM_COLLECTION_PATTERN, 2);
+
+                BlockItemUtils.expandCollections(itemCollectionTypes, itemCollections, items, itemsreg);
 
                 ArrayList<String> icons = DatalistUtils.listTextures("img");
 
