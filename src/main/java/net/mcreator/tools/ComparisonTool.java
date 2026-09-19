@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ComparisonTool {
 
-    private static final Compare WHAT = Compare.SCREENS;
+    private static final Compare WHAT = Compare.BLOCK_ITEM;
 
     public enum Compare {
         LIST, MAP, MAP_WITH_COMPLEX_LIST, BLOCK_ITEM, SOUND_MAP, ENTITY_MAP, ADVANCEMENT_MAP, PARTICLE_MAP, SCREENS, BLOCKSTATEPROPERTIES, ENCHANTMENT_MAP
@@ -67,7 +67,7 @@ public class ComparisonTool {
                 mcr = DatalistUtils.readListFromFileComplex(
                         ClassLoader.getSystemClassLoader().getResource("lists/mcreator"));
                 ArrayList<ArrayList<String>> mcs = DatalistUtils.extractEntityListFromClass(
-                        ClassLoader.getSystemClassLoader().getResource("lists/classes/entity/EntityType.java"));
+                        ClassLoader.getSystemClassLoader().getResource("lists/classes/EntityTypes.java"));
                 ArrayList<LinkedHashMap<String, String>> mcrmap = MappingUtils.readEntityMapFromFile(
                         ClassLoader.getSystemClassLoader().getResource("maps/mcreator"));
                 MappingUtils.compareEntityMaps(mcr, mcrmap, mcs);

@@ -10,6 +10,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -21,7 +22,7 @@ public class DatalistUtils {
     public static final Pattern SOUNDS_CLASS_PATTERN = Pattern.compile(
             "(?:Holder(?:\\.Reference)?<SoundEvent>|SoundEvent) .* = (?:register|registerForHolder)\\(\"(.*)\"\\);");
     public static final Pattern ENTITY_CLASS_PATTERN = Pattern.compile(
-            "public static final EntityType<(.+)>\\s*([A-Z0-9_]+)\\s*=\\s*register\\(\\s*\"(.+)\",\\s*EntityType");
+            "public static final EntityType<(.+?)>\\s*([A-Z0-9_]+)\\s*=\\s*register\\(\\s*EntityTypeIds\\.([A-Z0-9_]+)\\s*,");
     public static final Pattern SCREENS_CLASS_PATTERN = Pattern.compile("public (?:abstract )?class .* extends (?!.*HasCustomInventoryScreen)(.*Screen.*) ");
     public static final Pattern BLOCKSTATEPROPERTY_CLASS_PATTERN = Pattern.compile(
             "public static final (?:Boolean|Enum|Direction|Integer)Property(?:<.+>)?\\s?([_A-Z0-9]+)\\s*=.*?\\((\\s*\"(.+)\")");
@@ -82,9 +83,9 @@ public class DatalistUtils {
             file = file.replaceAll("(?<!;)\n", "");
             return new ArrayList<>(Arrays.asList(ENTITY_CLASS_PATTERN.matcher(file).results().map(m -> m.group(1))
                             .collect(Collectors.toCollection(ArrayList::new)),
-                    ENTITY_CLASS_PATTERN.matcher(file).results().map(m -> "EntityType." + m.group(2))
+                    ENTITY_CLASS_PATTERN.matcher(file).results().map(m -> "EntityTypes." + m.group(2))
                             .collect(Collectors.toCollection(ArrayList::new)),
-                    ENTITY_CLASS_PATTERN.matcher(file).results().map(m -> m.group(3))
+                    ENTITY_CLASS_PATTERN.matcher(file).results().map(m -> m.group(3).toLowerCase(Locale.ROOT))
                             .collect(Collectors.toCollection(ArrayList::new))));
         } catch (URISyntaxException e) {
             e.printStackTrace();
